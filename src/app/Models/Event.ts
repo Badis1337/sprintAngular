@@ -6,7 +6,9 @@ export class Events {
               public end: Date,
               public color: string,
               public allDay: true,
-              public state: string) {
+              public state: string,
+              public editable: boolean,
+              public click: boolean) {
 
   }
 }

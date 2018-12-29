@@ -12,10 +12,14 @@ import {Events} from '../../Models/Event';
 })
 export class RessourcesCRUDComponent implements OnInit {
   q: Conges[] = [];
+  cooo: Events[] = [];
   conges: Events[] = [];
   date: Date;
   date2: Date;
   date3: Date;
+  dateex;
+  dateDebut;
+  dateEnd;
 
   selectedEvent: Events = null;
 
@@ -28,29 +32,18 @@ export class RessourcesCRUDComponent implements OnInit {
   ngOnInit() {
     this.getListeConges();
     this.calendarOptions = {
+      lazyFetching: false,
       editable: true,
       eventLimit: false,
-      eventRender: function (event) {
-        if (event.state === 'Accepted') {
-          event.editable = false;
-          event.click = true;
-        } else if (event.state === 'Waiting') {
-          event.editable = true;
-        } else if (event.state === 'Denied') {
-          event.editable = false;
-          event.click = false;
-        }
-      },
+
       header: {
         left: 'prev,next today',
         center: 'title',
         right: 'month,agendaWeek,agendaDay,listMonth'
       },
       selectable: true,
-      events: this.conges
+      events: this.conges,
     };
-
-
   }
 
   clearEvents() {
@@ -68,17 +61,24 @@ export class RessourcesCRUDComponent implements OnInit {
       this.q = data;
       let color;
       let tit;
+      let click;
+      let edit;
       for (let i = 0; i < this.q.length; i++) {
         if (this.q[i].StateDemande === 'Accepted') {
+          click = false;
+          edit = false;
           tit = 'Demande de congé acceptée';
           color = '#00FF00';
         } else if (this.q[i].StateDemande === 'Waiting') {
           tit = 'Demande de congé en attente';
+          click = true;
+          edit = true;
 
           color = '#FFFF00';
         } else {
           tit = 'Demande de congé refusée';
-
+          click = false;
+          edit = false;
           color = '#FF0000';
         }
         this.date = new Date(this.q[i].DateEnd);
@@ -90,16 +90,16 @@ export class RessourcesCRUDComponent implements OnInit {
           , this.date,
           color,
           true,
-          this.q[i].StateDemande);
+          this.q[i].StateDemande, edit, click);
         this.conges.push(event);
       }
     });
   }
 
   EventClick(data) {
-
     let ev: Events = new Events(data.detail.event.eventID, data.detail.event.title, data.detail.event.description,
-      data.detail.event.start, data.detail.event.end, data.detail.event.color, data.detail.event.allDay, data.detail.event.state);
+      data.detail.event.start, data.detail.event.end, data.detail.event.color, data.detail.event.allDay, data.detail.event.state,
+      data.detail.event.editable, data.detail.event.click);
     if (ev != null) {
       this.selectedEvent = ev;
       this.date2 = new Date(ev.start);
@@ -118,27 +118,91 @@ export class RessourcesCRUDComponent implements OnInit {
         return false;
       }
     } else {
-      return false;
+      document.getElementById('btn2').click();
     }
-
-
   }
+
+  render(data) {
+    let event: Events = new Events(data.detail.event.eventID, data.detail.event.title, data.detail.event.description,
+      data.detail.event.start, data.detail.event.end, data.detail.event.color,
+      data.detail.event.allDay, data.detail.event.state, data.detail.event.editable, data.detail.event.click);
+    if (event != null) {
+      if (event.state === 'Accepted') {
+        event.editable = false;
+        event.click = true;
+      } else if (event.state === 'Waiting') {
+        event.editable = true;
+      } else if (event.state === 'Denied') {
+        event.editable = false;
+        event.click = false;
+      }
+    }
+  }
+
 
   Delete() {
     console.log(this.selectedEvent);
     if (this.selectedEvent !== null) {
-      this.rs.DeleteConges(this.selectedEvent.eventID).subscribe();
       document.getElementById('btn').click();
       for (let i = 0; i < this.conges.length; i++) {
         if (this.conges[i].eventID === this.selectedEvent.eventID) {
           this.conges.splice(i, 1);
         }
       }
-      console.log('aaaaaaa' + this.conges);
-      this.getListeConges();
-      this.ucCalendar.fullCalendar('rerenderEvents');
+      let n;
+      setTimeout(function () {
+        n += 10;
+      }, 2000);
+
+      console.log(this.conges);
+      this.cooo = this.conges;
+      this.ucCalendar.fullCalendar('updateEvents', this.cooo);
+      this.Delete2();
     }
 
 
+  }
+
+  Delete2() {
+    this.rs.DeleteConges(this.selectedEvent.eventID).subscribe();
+    this.conges = [];
+    this.q = [];
+    this.getListeConges();
+    console.log('liste jdida');
+    console.log(this.conges);
+    this.ucCalendar.fullCalendar('rerenderEvents');
+    this.selectedEvent = null;
+  }
+
+  select(data) {
+
+    let datee;
+    datee = new Date(data.start);
+    let event: Events = new Events(0, 'congé', 'demande',
+      datee.toLocaleDateString(), datee.toLocaleDateString(), '',
+      true, '', true, true);
+    this.selectedEvent = event;
+    this.openAddEditForm();
+
+  }
+
+  openAddEditForm() {
+
+    document.getElementById('btn2').click();
+  }
+
+  ajouter(data) {
+    this.dateDebut = this.formatDate(this.dateDebut);
+    this.dateEnd = this.formatDate(this.dateEnd);
+    let ev = new Conges(0, this.dateDebut, this.dateEnd, 'Waiting', 0, null);
+    this.rs.AddConges(ev);
+  }
+
+  formatDate(input) {
+    let datePart = input.match(/\d+/g),
+      year = datePart[0].substring(0, 4), // get only two digits
+      month = datePart[1], day = datePart[2];
+
+    return day + '-' + month + '-' + year;
   }
 }

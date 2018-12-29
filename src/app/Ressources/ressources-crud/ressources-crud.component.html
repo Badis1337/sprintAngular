@@ -1,11 +1,16 @@
 <div *ngIf="calendarOptions">
-  <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="EventClick($event)" style="text-align:center"
-                   [(eventsModel)]="conges"></ng-fullcalendar>
+  <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="EventClick($event)"
+                   (eventRender)="render($event)" style="text-align:center"
+                   (select)="select($event.detail)" [(eventsModel)]="conges"></ng-fullcalendar>
 
 </div>
 
 <!-- Button trigger modal -->
-<button id="btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+<button hidden id="btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<button hidden id="btn2" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalSave">
   Launch demo modal
 </button>
 <div id="myModal" class="modal fade show" role="dialog">
@@ -45,10 +50,8 @@
           <div class="form-group">
             <label>Start</label>
             <div class="input-group date" id="dtp1">
-              <input type="text" id="txtStart" class="form-control"/>
-              <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+              <input type="date" [(ngModel)]="dateDebut" name="dateDebut" id="txtStart" class="form-control"/>
+
             </div>
           </div>
           <div class="form-group">
@@ -59,14 +62,11 @@
           <div class="form-group" id="divEndDate">
             <label>End</label>
             <div class="input-group date" id="dtp2">
-              <input type="text" id="txtEnd" class="form-control"/>
-              <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+              <input type="date" name="dateEnd" [(ngModel)]="dateEnd" id="txtEnd" class="form-control"/>
             </div>
           </div>
 
-          <button type="button" id="btnSave" class="btn btn-success">Save</button>
+          <button type="button" id="btnSave" (click)="ajouter($event.detail)" class="btn btn-success">Save</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </form>
       </div>
