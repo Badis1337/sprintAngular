@@ -112,7 +112,7 @@ $(document).ready(function() {
             "marginRight": 0,
             "dataProvider": [{
                 "year": "1950",
-                "value": -0.307
+                "value": 0.4
             }, {
                 "year": "1951",
                 "value": -0.168

@@ -1,0 +1,38 @@
+<div class="container">  
+  <table class="table table-hover">
+      <thead>
+    <tr>
+      <th scope="col">
+        name
+      </th>
+      <th scope="col">
+        lastName
+      </th>
+      <th scope="col">
+        beginDate
+      </th>
+      <th scope="col">
+        endDate
+      </th>
+      <th scope="col">
+      activityRate
+    </th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let resource of listResources" 
+      id="{{resource.id}}" 
+      (click)="navigate([resource.id],[resource.dateDebut],[resource.dateFin])"
+      [ngClass]="{'table-danger':resource.activity<=30,'table-success':resource.activity>60,'table-warning':resource.activity<=44.9}" >
+          <td>{{resource.Name}}</td>
+          <td>{{resource.LastName}}</td>
+          <td>{{resource.dateDebut}}</td>
+          <td>{{resource.dateFin}}</td>
+          <td>{{resource.activity}}%</td>
+          
+
+    </tr> 
+    </tbody>
+  </table>
+</div>
+<!--<div id="chartdiv"></div>-->
