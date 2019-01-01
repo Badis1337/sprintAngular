@@ -9,10 +9,12 @@ import { ResourceDetailsComponent } from './resource-details/resource-details.co
 import { RouterModule, Routes } from '@angular/router';
 import { Router } from '@angular/router';
 import {DatePipe} from '@angular/common';
+import { DecisionComponent } from './decision/decision.component';
 
 const routes: Routes = [
   {path: 'home', component: AllResourcesComponent},
   {path: 'details/:id/:from/:to', component: ResourceDetailsComponent},
+  {path: 'decision', component: DecisionComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full' },
   {path: '**', component: AllResourcesComponent}
 ];
@@ -22,7 +24,8 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     AllResourcesComponent,
-    ResourceDetailsComponent
+    ResourceDetailsComponent,
+    DecisionComponent
   ],
   imports: [
     BrowserModule,
