@@ -1,0 +1,17 @@
+tbody tr {
+    cursor: pointer;
+}
+tbody td {
+    text-align: center;
+}
+td:hover { 
+    background-color: grey;
+  }
+.active {
+    background-color: grey;
+}
+.sep{ 
+    width: 100%;
+    height: 4px;
+    background-color: cadetblue;
+}

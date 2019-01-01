@@ -1,16 +1,10 @@
-<p>
-  decision works!
-</p>
-<button (click)="resourcesPerSkill()">Number of Resources Per skill</button>
-<div [hidden]="changeRps" id="chart3div" style="width: 80%; height: 450px"></div>
-
-<button (click)="activityPerSkill()">Activity Per Skill</button>
-<div [hidden]="changeAps" id="chart4div" style="width: 80%; height: 450px"></div>
-
-<button (click)="activityPerCountry()">Activity Per Country</button>
-<div [hidden]="changeApc" id="chart1div" style="width: 80%; height: 450px"></div>
-
-<button (click)=" resourcesPerCountry()"> Number of Resources Per Country</button>
-<div [hidden]="changeRpc" id="chart2div" style="width: 80%; height: 450px"></div>
+<button class="btn-success" (click)="showStat()">show stat</button>
+<div  id="chart3div" style="width: 80%; height: 450px"></div>
+<div class="sep"></div>
+<div id="chart4div" style="width: 80%; height: 450px"></div>
+<div class="sep"></div>
+<div id="chart1div" style="width: 80%; height: 450px"></div>
+<div class="sep"></div>
+<div id="chart2div" style="width: 80%; height: 450px"></div>
 
 

@@ -26,27 +26,6 @@ export class AllResourcesComponent implements OnInit {
     });
   }
   ngOnInit() {
-    /*
-      // tslint:disable-next-line:prefer-const
-      let chart = am4core.create('chartdiv', am4charts.PieChart);
-      chart.radius = 42;
-      chart.innerRadius = 60;
-      chart.data = [{
-        'country': 'Lithuania',
-        'litres': 501.9
-      }, {
-        'country': 'The Netherlands',
-        'litres': 50
-      }];
-
-      // tslint:disable-next-line:prefer-const
-      let pieSeries = chart.series.push(new am4charts.PieSeries());
-      pieSeries.dataFields.value = 'litres';
-      pieSeries.dataFields.category = 'country';
-      pieSeries.labels.template.disabled = true;
-      pieSeries.ticks.template.disabled = true;
-      pieSeries.slices.template.tooltipText = '';
-      */
   }
   navigate(id: number, from: string, to: string) {
     this.router.navigateByUrl('/details/' + id + '/' + from + '/' + to);
