@@ -1,7 +1,9 @@
 <div *ngIf="calendarOptions">
   <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="EventClick($event)"
                    (eventRender)="render($event)" style="text-align:center"
-                   (select)="select($event.detail)" [(eventsModel)]="conges"></ng-fullcalendar>
+                   (eventDrop)="updateEvent($event)"
+                   (select)="select($event.detail)"
+                   [(eventsModel)]="conges"></ng-fullcalendar>
 
 </div>
 

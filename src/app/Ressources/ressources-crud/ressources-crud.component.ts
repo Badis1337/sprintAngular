@@ -20,7 +20,7 @@ export class RessourcesCRUDComponent implements OnInit {
   dateex;
   dateDebut;
   dateEnd;
-
+  selected;
   selectedEvent: Events = null;
 
   calendarOptions: Options;
@@ -94,9 +94,11 @@ export class RessourcesCRUDComponent implements OnInit {
         this.conges.push(event);
       }
     });
+    return this.conges;
   }
 
   EventClick(data) {
+    this.selected = data;
     let ev: Events = new Events(data.detail.event.eventID, data.detail.event.title, data.detail.event.description,
       data.detail.event.start, data.detail.event.end, data.detail.event.color, data.detail.event.allDay, data.detail.event.state,
       data.detail.event.editable, data.detail.event.click);
@@ -141,37 +143,29 @@ export class RessourcesCRUDComponent implements OnInit {
 
 
   Delete() {
-    console.log(this.selectedEvent);
     if (this.selectedEvent !== null) {
-      document.getElementById('btn').click();
-      for (let i = 0; i < this.conges.length; i++) {
-        if (this.conges[i].eventID === this.selectedEvent.eventID) {
-          this.conges.splice(i, 1);
-        }
-      }
-      let n;
-      setTimeout(function () {
-        n += 10;
-      }, 2000);
+      console.log(this.selected);
+      /*      console.log('l ');
+            console.log(this.conges)
+            for(let i = 0 ; i<this.conges.length ; i++){
+              if(this.conges[i].eventID===this.selectedEvent.eventID){
+                this.conges.splice(i , 1);
 
-      console.log(this.conges);
-      this.cooo = this.conges;
-      this.ucCalendar.fullCalendar('updateEvents', this.cooo);
-      this.Delete2();
+
+              }
+            }
+            console.log('l2 ');
+            console.log(this.conges);
+            document.getElementById('btn').click();
+            console.log(this.selected._id);
+            this.ucCalendar.fullCalendar('removeEvents',this.selected._id);*/
+
+      // this.rs.DeleteConges(this.selectedEvent.eventID).subscribe();
+      //   this.ucCalendar.fullCalendar('removeEventSources', this.conges, true);
+      //  this.ucCalendar.fullCalendar('renderEvents' , this.conges , false);
+
+
     }
-
-
-  }
-
-  Delete2() {
-    this.rs.DeleteConges(this.selectedEvent.eventID).subscribe();
-    this.conges = [];
-    this.q = [];
-    this.getListeConges();
-    console.log('liste jdida');
-    console.log(this.conges);
-    this.ucCalendar.fullCalendar('rerenderEvents');
-    this.selectedEvent = null;
   }
 
   select(data) {
@@ -195,7 +189,16 @@ export class RessourcesCRUDComponent implements OnInit {
     this.dateDebut = this.formatDate(this.dateDebut);
     this.dateEnd = this.formatDate(this.dateEnd);
     let ev = new Conges(0, this.dateDebut, this.dateEnd, 'Waiting', 0, null);
+    let event: Events = new Events(0, 'Demande de congé en atente', '',
+      this.dateDebut, this.dateEnd, '#FFFF00',
+      true, 'Waiting', true, true);
+    this.ucCalendar.fullCalendar('renderEvent', event);
+    document.getElementById('btn2').click();
     this.rs.AddConges(ev);
+    this.ngOnInit();
+
+
+
   }
 
   formatDate(input) {
@@ -203,6 +206,21 @@ export class RessourcesCRUDComponent implements OnInit {
       year = datePart[0].substring(0, 4), // get only two digits
       month = datePart[1], day = datePart[2];
 
-    return day + '-' + month + '-' + year;
+    return year + '-' + month + '-' + day;
   }
+
+  updateEvent(data) {
+    let datee;
+    datee = new Date(data.detail.event.end);
+    datee.setDate(datee.getDate() - 1);
+
+    let ev = new Conges(data.detail.event.eventID, data.detail.event.start, datee, data.detail.event.state
+    );
+    console.log(ev);
+    this.rs.PutConges(ev);
+
+  }
+
+
+
 }
