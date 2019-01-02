@@ -1,3 +1,4 @@
+import { Mandate } from './../models/Mandate';
 import { Resource } from './../models/Resource';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -16,5 +17,8 @@ export class AllResourcesService {
     return this.http.
     // tslint:disable-next-line:max-line-length
     get('http://localhost:18080/l4c_map-v1-web/rest/applicant/abdouu?m=0&resID=' + id + '&from=' + from + '&to=' + to, {responseType: 'text'});
+  }
+  public getMandates(id: number) {
+      return this.http.get<Mandate[]>('http://localhost:18080/l4c_map-v1-web/rest/applicant/abdouu?m=2&resID=' + id);
   }
 }

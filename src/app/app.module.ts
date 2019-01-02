@@ -13,7 +13,7 @@ import { DecisionComponent } from './decision/decision.component';
 
 const routes: Routes = [
   {path: 'home', component: AllResourcesComponent},
-  {path: 'details/:id/:from/:to', component: ResourceDetailsComponent},
+  {path: 'details/:id/:from/:to/:n/:l', component: ResourceDetailsComponent},
   {path: 'decision', component: DecisionComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full' },
   {path: '**', component: AllResourcesComponent}

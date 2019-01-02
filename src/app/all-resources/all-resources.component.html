@@ -22,7 +22,7 @@
     <tbody>
       <tr *ngFor="let resource of listResources" 
       id="{{resource.id}}" 
-      (click)="navigate([resource.id],[resource.dateDebut],[resource.dateFin])"
+      (click)="navigate([resource.id],[resource.dateDebut],[resource.dateFin],[resource.Name],[resource.LastName])"
       [ngClass]="{'table-danger':resource.activity<=30,'table-success':resource.activity>60,'table-warning':resource.activity<=44.9}" >
           <td>{{resource.Name}}</td>
           <td>{{resource.LastName}}</td>

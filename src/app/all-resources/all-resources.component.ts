@@ -27,8 +27,8 @@ export class AllResourcesComponent implements OnInit {
   }
   ngOnInit() {
   }
-  navigate(id: number, from: string, to: string) {
-    this.router.navigateByUrl('/details/' + id + '/' + from + '/' + to);
+  navigate(id: number, from: string, to: string, n: string, l: string) {
+    this.router.navigateByUrl('/details/' + id + '/' + from + '/' + to + '/' + n + '/' + l);
   }
 
 }

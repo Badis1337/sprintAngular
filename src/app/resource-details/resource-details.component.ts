@@ -1,3 +1,6 @@
+import { Mandate } from './../models/Mandate';
+import { Resource } from './../models/Resource';
+import { length } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import { CustomStat } from './../models/customStat';
 import { AllResourcesService } from './../services/all-resources.service';
 import { Component, OnInit, NgZone } from '@angular/core';
@@ -6,8 +9,7 @@ import { DatePipe } from '@angular/common';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
-import { checkArray } from '@amcharts/amcharts4/.internal/core/utils/Type';
-
+import * as jsPDF from 'jspdf';
 am4core.useTheme(am4themes_animated);
 
 @Component({
@@ -24,10 +26,23 @@ export class ResourceDetailsComponent implements OnInit {
   n = 0;
   g = 0;
   a = '';
+  mandates: Mandate[];
+  name = '';
+  lastName = '';
+  r: Resource[];
+  id: number;
 
   constructor(private Rs: AllResourcesService,
     private route: ActivatedRoute, private datePipe: DatePipe, private zone: NgZone) {
     this.listr = [];
+    this.mandates = [];
+    this.id = 0;
+    this.r = [];
+      this.route.params.subscribe(params => {this.id = params['id'];
+    this.name = params['n'];
+    this.lastName = params['l'];
+    });
+
   }
 
   ngOnInit() {
@@ -36,6 +51,8 @@ export class ResourceDetailsComponent implements OnInit {
       // tslint:disable-next-line:no-var-keyword
       var k = 0;
       this.route.params.subscribe(params => {
+        this.Rs.getMandates(params['id']).subscribe(data => this.mandates = data);
+
         // tslint:disable-next-line:prefer-const
         let test = new Date();
         if (new Date(params['to']) < new Date()) {
@@ -122,6 +139,25 @@ export class ResourceDetailsComponent implements OnInit {
     chart.scrollbarX = scrollbarX;
     this.chart = chart;
     console.log(this.listr[2].value);
+    console.log(this.mandates);
+  }
+  downloadPDF() {
+    console.log(this.id);
+    const doc = new jsPDF();
+    console.log(this.mandates);
+    // tslint:disable-next-line:prefer-const
+    let a = 'name  :' + this.name + '\n'
+    + 'LastName  :' + this.lastName + '\n'
+    + '****' + '\n';
+    // tslint:disable-next-line:prefer-const
+    for (let man of this.mandates) {
+      a += 'projectName  :' + man.project.name + '\n'
+      + 'dateBegin  :' + man.dateBegin + '\n'
+      + 'dateEnd  :' + man.dateEnd + '\n'
+      + '--------- \n';
+    }
+    doc.text(a, 10, 10);
+    doc.save('test.pdf');
   }
 
 }
