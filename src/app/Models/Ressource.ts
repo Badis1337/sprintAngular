@@ -1,3 +1,6 @@
+import {Conges} from './Conges';
+import {Skills} from './Skills';
+
 export class Ressource {
   constructor(public  id: number,
               public name: string,
@@ -16,9 +19,9 @@ export class Ressource {
               public type?: string,
               public specialty?: string,
               public businessSector?: string,
-              public skills?: any[],
+              public skills?: Skills[],
               public listemandate?: any[],
-              public listeDemandesTimeOff?: any[],
+              public listeDemandesTimeOff?: Conges[],
               public picture?: string) {
 
   }

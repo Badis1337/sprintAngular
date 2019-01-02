@@ -143,26 +143,18 @@ export class RessourcesCRUDComponent implements OnInit {
 
 
   Delete() {
+    let c: Events;
     if (this.selectedEvent !== null) {
-      console.log(this.selected);
-      /*      console.log('l ');
-            console.log(this.conges)
-            for(let i = 0 ; i<this.conges.length ; i++){
-              if(this.conges[i].eventID===this.selectedEvent.eventID){
-                this.conges.splice(i , 1);
-
-
-              }
-            }
-            console.log('l2 ');
-            console.log(this.conges);
-            document.getElementById('btn').click();
-            console.log(this.selected._id);
-            this.ucCalendar.fullCalendar('removeEvents',this.selected._id);*/
-
-      // this.rs.DeleteConges(this.selectedEvent.eventID).subscribe();
-      //   this.ucCalendar.fullCalendar('removeEventSources', this.conges, true);
-      //  this.ucCalendar.fullCalendar('renderEvents' , this.conges , false);
+      console.log(this.conges);
+      for (let i = 0; i < this.conges.length; i++) {
+        if (this.conges[i].eventID === this.selectedEvent.eventID) {
+          this.conges.splice(i, 1);
+          c = this.conges[i];
+        }
+      }
+      document.getElementById('btn').click();
+      this.rs.DeleteConges(this.selectedEvent.eventID).subscribe();
+      this.ngOnInit();
 
 
     }
@@ -180,6 +172,10 @@ export class RessourcesCRUDComponent implements OnInit {
 
   }
 
+  Edit(data) {
+
+  }
+
   openAddEditForm() {
 
     document.getElementById('btn2').click();
@@ -188,14 +184,21 @@ export class RessourcesCRUDComponent implements OnInit {
   ajouter(data) {
     this.dateDebut = this.formatDate(this.dateDebut);
     this.dateEnd = this.formatDate(this.dateEnd);
-    let ev = new Conges(0, this.dateDebut, this.dateEnd, 'Waiting', 0, null);
-    let event: Events = new Events(0, 'Demande de congé en atente', '',
-      this.dateDebut, this.dateEnd, '#FFFF00',
-      true, 'Waiting', true, true);
-    this.ucCalendar.fullCalendar('renderEvent', event);
-    document.getElementById('btn2').click();
-    this.rs.AddConges(ev);
-    this.ngOnInit();
+    if (new Date(this.dateEnd).getTime() < new Date(this.dateDebut).getTime()) {
+      console.log('Please insert valid dates');
+      alert('Please insert valid dates');
+    } else {
+      let date = new Date(this.dateEnd);
+      date.setDate(date.getDate() + 1);
+      let ev = new Conges(0, this.dateDebut, this.dateEnd, 'Waiting', 0, null);
+      let event: Events = new Events(0, 'Demande de congé en atente', '',
+        this.dateDebut, date, '#FFFF00',
+        true, 'Waiting', true, true);
+      this.ucCalendar.fullCalendar('renderEvent', event, true);
+      document.getElementById('btn2').click();
+      this.rs.AddConges(ev);
+      this.ngOnInit();
+    }
 
 
 
@@ -220,7 +223,6 @@ export class RessourcesCRUDComponent implements OnInit {
     this.rs.PutConges(ev);
 
   }
-
 
 
 }
